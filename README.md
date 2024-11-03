@@ -28,14 +28,22 @@
 ### 先决条件
 列出需要的依赖项，如：
 - Python 3.8+
-- [其他依赖项](链接)
+- torch
+- torchvision
+- Pillow
+- pandas
+- tqdm
+- scikit-learn
+- typing
+- argparse
+- matplotlib
 
 ### 安装步骤
 克隆仓库并安装依赖项。
 
 ```bash
-git clone https://github.com/你的用户名/项目名称.git
-cd 项目名称
+git clone https://github.com/qingfeng7843/PlantDataset_sysu_homework.git
+cd PlantDataset_sysu_homework
 pip install -r requirements.txt
 ```
 
