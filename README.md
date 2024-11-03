@@ -2,7 +2,7 @@
 
 ![License](https://github.com/qingfeng7843/PlantDataset_sysu_homework) ![Issues](https://github.com/qingfeng7843/PlantDataset_sysu_homework)
 
-简要介绍项目的用途和功能。
+本项目为中山大学计算机视觉课程作业，旨在记录学习过程，总结经验与教训。
 
 ## 目录
 - [简介](#简介)
