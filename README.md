@@ -9,11 +9,7 @@
 - [特性](#特性)
 - [安装](#安装)
 - [用法示例](#用法示例)
-- [API 文档](#api-文档)
 - [测试](#测试)
-- [贡献](#贡献)
-- [许可](#许可)
-- [联系我们](#联系我们)
 
 ## 简介
 在这里详细介绍项目的背景、目标和使用场景。
@@ -74,3 +70,6 @@ plant_dataset/
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"  # 使用0和1号显卡
 ```
 3.目前的predictions.csv是模型使用torch.nn.BCELoss()时训练所得到的结果，正确率已经达到了87.78%。后续打算优化损失函数，如Focal_Loss与ArcFace_Loss。
+
+4.目前已经从torchvision官网中[Related Link](https://pytorch.org/vision/stable//_modules/torchvision/models/swin_transformer.html#Swin_B_Weights)调取swin_transformer的源码，并进行修改，成功搭建swin_b的网络架构，详细内容请见network.py。
+
