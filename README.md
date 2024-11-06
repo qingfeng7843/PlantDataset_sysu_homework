@@ -47,7 +47,26 @@ cd PlantDataset_sysu_homework
 pip install -r requirements.txt
 ```
 
-1.第一步，将数据集进行处理，使用代码one_hot.py，进行独热编码，将类别标签缩减为6个基本种类。
+1.第一步，将数据集进行处理，使用代码one_hot.py，进行独热编码，将类别标签缩减为6个基本种类。数据集格式处理完后格式如下：
+
+```
+plant_dataset/
+├── train/
+│   ├── images/
+│   │   ├── image1.jpg
+│   │   ├── image2.jpg
+│   │   └── ...
+│   └── labels.csv
+├── val/
+│   ├── images/
+│   │   ├── image1.jpg
+│   │   └── ...
+│   └── labels.csv
+└── test/
+    ├── images/
+    │   ├── image1.jpg
+    │   └── ...
+    └── labels.csv
 
 2.第二步，为了解决batch_size=32时显存溢出的问题，修改trian.py，使用多卡训练，训练指令示例如下：
 ```bash
