@@ -53,8 +53,10 @@ def train(e, model, loader, opt, criterion):
         target = target.cuda()  # 将目标标签移至GPU
 
         opt.zero_grad()  # 清除之前的梯度
-        output = torch.sigmoid(model(img)).float()  # 进行前向传播并通过sigmoid激活函数获得预测概率
-        loss = criterion(output, target)  # 计算损失
+        feature, x = model(img)
+        output = torch.sigmoid(x).float()
+        #output = torch.sigmoid(model(img)).float()  # 进行前向传播并通过sigmoid激活函数获得预测概率
+        loss = criterion(output, target) #+ 0.1* model.module.compute_arcface_loss(feature, target) # 计算损失
 
         loss.backward()  # 反向传播计算梯度
         opt.step()  # 更新模型参数
@@ -119,7 +121,9 @@ def validation(e, model, loader, criterion):
         target = target.cuda()  # 将目标标签移至GPU
 
         with torch.no_grad():  # 在评估模式下不计算梯度
-            output = torch.sigmoid(model(img)).float()  # 进行前向传播并通过sigmoid激活函数获得预测概率
+            _, x = model(img)
+            output = torch.sigmoid(x).float()
+            #output = torch.sigmoid(model(img)).float()  # 进行前向传播并通过sigmoid激活函数获得预测概率
             loss = criterion(output, target)  # 计算损失
         
         acc_loss += loss.item()  # 累加损失
@@ -160,4 +164,3 @@ def validation(e, model, loader, criterion):
     del correct  # 删除正确计数以释放内存
 
     return avg_loss, avg_acc  # 返回平均损失和准确率
-
