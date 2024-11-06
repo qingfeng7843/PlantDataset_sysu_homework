@@ -33,7 +33,12 @@ test_loader = DataLoader(test_data, batch_size=1, shuffle=False,num_workers=0)
 
 model = models.swin_b(weights=None)
 model.head = nn.Linear(1024, 6)
-model.load_state_dict(torch.load("/media/tiankanghui/plant_mymodel/pretrained/swin_b-68c6b09e.pth"))
+model = model.cuda()  # 先将模型移动到GPU
+model = nn.DataParallel(model)
+checkpoint = torch.load("/media/tiankanghui/plant_mymodel/pretrained/swin_b_train_num0.pth")
+model.load_state_dict(checkpoint['model_state_dict'])
+
+
 
 images,predictions, acc = model_test(model,test_loader)
 
