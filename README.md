@@ -67,8 +67,10 @@ plant_dataset/
     │   ├── image1.jpg
     │   └── ...
     └── labels.csv
-
-2.第二步，为了解决batch_size=32时显存溢出的问题，修改trian.py，使用多卡训练，训练指令示例如下：
-```bash
-python train.py --gpu_ids "1,2" --data-path /media/tiankanghui/Plant-Pathology-2021-master/plant_dataset
 ```
+
+2.第二步，为了解决batch_size较大时显存溢出的问题，修改trian.py，使用多卡训练，直接在model.py中设置，示例如下：
+```bash
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"  # 使用0和1号显卡
+```
+3.目前的predictions.csv是模型使用torch.nn.BCELoss()时训练所得到的结果，正确率已经达到了87.78%。后续打算优化损失函数，如Focal_Loss与ArcFace_Loss。
