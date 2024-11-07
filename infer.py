@@ -17,6 +17,8 @@ from model_save_load import save_model, load_model
 from dataset import Plant_Dataset
 from train import train, train_val, validation
 from test import model_test
+from network import SwinTransformer
+
 gc.collect() 
 torch.cuda.empty_cache()
 
@@ -31,8 +33,8 @@ test_data = Plant_Dataset(test_folder_path,test_path,test_df_cp, transforms=test
 test_loader = DataLoader(test_data, batch_size=1, shuffle=False,num_workers=0)
 
 
-model = models.swin_b(weights=None)
-model.head = nn.Linear(1024, 6)
+model = SwinTransformer()
+#model.head = nn.Linear(1024, 6)
 model = model.cuda()  # 先将模型移动到GPU
 model = nn.DataParallel(model)
 checkpoint = torch.load("/media/tiankanghui/plant_mymodel/pretrained/swin_b_train_num0.pth")
