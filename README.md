@@ -73,3 +73,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"  # 使用0和1号显卡
 
 4.目前已经从torchvision官网中[Related Link](https://pytorch.org/vision/stable//_modules/torchvision/models/swin_transformer.html#Swin_B_Weights)调取swin_transformer的源码，并进行修改，成功搭建swin_b的网络架构，详细内容请见network.py。
 
+5.成功引入ArcFaceLoss，由于我们的任务是多标签分类，因此最后线性分类头的输出不再经过softmax输出概率，而是使用sigmoid函数。同理，对于ArcFaceLoss的计算也是如此，在计算出对应的[cosx1, cosx2, ...,cos(x6+m)]后，经过sigmoid将其转化为概率值，然后与对应gt label计算二元交叉损失。
+
+6.接下来的任务是确定合适的超参数，主要包括FocalLoss与ArcFaceLoss的占比，固定FocalLoss系数为1，ArcFaceLoss的系数由0.1开始逐步增加，测试结果；此外，还有ArcFaceLoss计算中的尺度缩放因子s，与角度裕度m。
+
+7.对模型从头开始训练了一百轮，效果不是很好，因此决定还是要采用预训练模型，由于我们只是对网络架构在head处进行了修改，因此，backbone的预训练模型权重是可以使用的，后续的训练，都是要在预训练模型的基础上进行的。
