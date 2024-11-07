@@ -5,7 +5,9 @@ from typing import Any, Callable, List, Optional
 import torch
 import torch.nn.functional as F
 from torch import nn, Tensor
-
+from torchvision.ops.misc import MLP, Permute
+from torchvision.ops.stochastic_depth import StochasticDepth
+from torchvision.utils import _log_api_usage_once
 # from ..ops.misc import MLP, Permute
 # from ..ops.stochastic_depth import StochasticDepth
 # from ..transforms._presets import ImageClassification, InterpolationMode
@@ -13,11 +15,7 @@ from torch import nn, Tensor
 # from ._api import register_model, Weights, WeightsEnum
 # from ._meta import _IMAGENET_CATEGORIES
 # from ._utils import _ovewrite_named_param, handle_legacy_interface
-
-from torchvision.ops.misc import MLP, Permute
-from torchvision.ops.stochastic_depth import StochasticDepth
-
-from torchvision.utils import _log_api_usage_once
+from ArcFace_loss import MultiLabelArcFaceLoss
 
 
 
@@ -450,6 +448,8 @@ class SwinTransformer(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d(1)
         self.flatten = nn.Flatten(1)
         self.head = nn.Linear(num_features, num_classes)
+        # ArcFaceLoss 初始化
+        self.arcface_loss = MultiLabelArcFaceLoss(num_classes=self.num_classes, embedding_size=embed_dim * 2 ** (len(depths) - 1))
 
         for m in self.modules():
             if isinstance(m, nn.Linear):
@@ -462,7 +462,17 @@ class SwinTransformer(nn.Module):
         x = self.norm(x)
         x = self.permute(x)
         x = self.avgpool(x)
-        x = self.flatten(x)
-        x = self.head(x)
-        return x
+        feature = self.flatten(x)
+        x = self.head(feature)
+        return feature, x
+    
+    def compute_arcface_loss(self, feature, labels):
+        """
+        计算 ArcFace 损失。
+        Args:
+            feature (Tensor): 嵌入向量，形状为 [batch_size, embedding_size]。
+            labels (Tensor): 标签，形状为 [batch_size]。
+        """
+        loss = self.arcface_loss(feature, labels)
+        return loss
 
