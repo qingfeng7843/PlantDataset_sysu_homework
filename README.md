@@ -78,3 +78,5 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"  # 使用0和1号显卡
 6.接下来的任务是确定合适的超参数，主要包括FocalLoss与ArcFaceLoss的占比，固定FocalLoss系数为1，ArcFaceLoss的系数由0.1开始逐步增加，测试结果；此外，还有ArcFaceLoss计算中的尺度缩放因子s，与角度裕度m。
 
 7.对模型从头开始训练了一百轮，效果不是很好，因此决定还是要采用预训练模型，由于我们只是对网络架构在head处进行了修改，因此，backbone的预训练模型权重是可以使用的，后续的训练，都是要在预训练模型的基础上进行的。
+
+8.之前以为分辨率越高越好，所以设置的是512*512，但读论文发现，对于图像分类而言，主流的分辨率还是384*384,详细请见[Related Link](https://developer.baidu.com/article/details/1890241)。
