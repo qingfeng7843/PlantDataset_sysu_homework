@@ -553,13 +553,10 @@ class SwinTransformer(nn.Module):
         x2 = intermediate_features[1]  # Layer 1 output shape: torch.Size([1, 32, 32, 512])
         x3 = intermediate_features[2]   # Layer 2 output shape: torch.Size([1, 16, 16, 1024])
         x1,x2,x3 = self.adjust([x1,x2,x3])
-        # 确保 x1, x2, x3, x 的形状是 b, c, h, w 形式
-        x1 = x1.permute(0, 3, 1, 2)  
-        x2 = x2.permute(0, 3, 1, 2)  
-        x3 = x3.permute(0, 3, 1, 2)  
-        x = x.permute(0, 3, 1, 2)    
-        combined = [x1, x2, x3, x]
-        combined = torch.cat(combined, dim=1)
+        # 确保 x1, x2, x3, x 的形状是 b, c, h, w [1, 16, 16, 1024]形式
+
+        combined = torch.cat([x1, x2, x3, x], dim=3)
+        combined = combined.permute(0,3,1,2)
         combined = self.bn3(combined)
         x1, x2, x3, x = torch.chunk(combined, 4, dim=1)
 
@@ -568,11 +565,12 @@ class SwinTransformer(nn.Module):
         features = self.channel_attention_process(features) #b,c,h,w
         fused_features = sum(w * f for w, f in zip(self.weights, features))  # Weighted sum
         fused_features = self.bn2(fused_features)
-        fused_features = self.fusion_conv(fused_features)  # Adjust channels
+        fused_features = self.fusion_conv(fused_features)  # Adjust channels[B 1024 16 16]
         fused_features = torch.mean(fused_features, dim=(2, 3))  # Shape: [B, 1024]
         fused_features = self.bn1(fused_features)
 
         feature = self.fc(fused_features)  # Shape: [B, 256]
+        feature = self.relu(feature)
         x = self.head(feature) 
 
         return feature, x
