@@ -35,7 +35,7 @@
 - matplotlib
 - cv2
 - numpy
-- albumentations
+- albumentations==0.4.6
 - gc
 - os
 
