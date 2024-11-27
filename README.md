@@ -23,7 +23,7 @@
 
 ### 先决条件
 列出需要的依赖项，如：
-- Python 3.8+
+- Python 3.8
 - torch
 - torchvision
 - Pillow
@@ -33,6 +33,11 @@
 - typing
 - argparse
 - matplotlib
+- cv2
+- numpy
+- albumentations
+- gc
+- os
 
 ### 安装步骤
 克隆仓库并安装依赖项。
